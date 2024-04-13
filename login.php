@@ -13,20 +13,24 @@ if (isset($_POST['login'])) {
     $userObject->setUserPassword($_POST['password']);
     $userData = $userObject->get_user_data_by_email();
     if (is_array($userData) && count($userData) > 0) {
-        if ($userData['status'] === 'ON') {
-            if ($userData['password'] == md5($_POST['password'])) {
-                $userObject->setUserId($userData['id']);
-                $_SESSION['userData'][$userData['id']] = [
-                    'id' => $userData['id'],
-                    'username' => $userData['username'],
-                    'email' => $userData['email'],
-                ];
-                header('location: index.php');
-            } else {
-                $error = 'Wrong password';
-            }
+        if ($userData['block'] == 1) {
+            
         } else {
-            $error = 'Please verify your email';
+            if ($userData['status'] === 'ON') {
+                if ($userData['password'] == md5($_POST['password'])) {
+                    $userObject->setUserId($userData['id']);
+                    $_SESSION['userData'][$userData['id']] = [
+                        'id' => $userData['id'],
+                        'username' => $userData['username'],
+                        'email' => $userData['email'],
+                    ];
+                    header('location: index.php');
+                } else {
+                    $error = 'Wrong password';
+                }
+            } else {
+                $error = 'Please verify your email';
+            }
         }
     } else {
         $error = 'Wrong Email address';

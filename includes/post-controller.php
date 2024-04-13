@@ -22,4 +22,19 @@ class postsController
             return false;
         }
     }
+
+    public function dataCounter($table, $where = NULL, $row = '*')
+    {
+        $sql = "SELECT COUNT(*) FROM $table";
+        if($where != NULL) {
+            $sql .= " WHERE $where";
+        }
+        $count = $this->connect->query($sql)->fetchColumn();
+        $totalRecords = $count;
+        if($totalRecords > 0){
+            return $totalRecords;
+        }else {
+            return false;
+        }
+    }
 }

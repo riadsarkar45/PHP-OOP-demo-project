@@ -99,7 +99,12 @@
                                         }else {
                                         ?>
                                         <tr>
-                                            <h2>No post found.</h2>
+                                            <td><h2>No post found.</h2></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
                                         </tr>
                                         <?php } ?>
                                     </tbody>
