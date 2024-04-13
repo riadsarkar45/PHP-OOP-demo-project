@@ -55,6 +55,23 @@ class userLogin
         return $this->userEmail;
     }
 
+    function checkUserBlockedOrNot(){
+        $query = "
+		SELECT * FROM banned_users 
+		WHERE user_id = :email
+		";
+
+		$statement = $this->connect->prepare($query);
+
+		$statement->bindParam(':email', $this->userEmail);
+
+		if($statement->execute())
+		{
+			$user_data = $statement->fetch(PDO::FETCH_ASSOC);
+		}
+		return $user_data;
+    }
+
     function get_user_data_by_email()
 	{
 		$query = "

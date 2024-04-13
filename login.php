@@ -12,25 +12,28 @@ if (isset($_POST['login'])) {
     $userObject->setUserEmail($_POST['email']);
     $userObject->setUserPassword($_POST['password']);
     $userData = $userObject->get_user_data_by_email();
+    $userBlockReason = $userObject->checkUserBlockedOrNot();
     if (is_array($userData) && count($userData) > 0) {
-        if ($userData['block'] == 1) {
-            
-        } else {
-            if ($userData['status'] === 'ON') {
-                if ($userData['password'] == md5($_POST['password'])) {
-                    $userObject->setUserId($userData['id']);
+        if ($userData['status'] === 'ON') {
+            if ($userData['password'] == md5($_POST['password'])) {
+                $userObject->setUserId($userData['id']);
+                if ($userData['block'] === '2') {
+                    if (is_array($userBlockReason) && count($userBlockReason) > 0) {
+                        $error = $userBlockReason['reason'];
+                    }
+                } else {
                     $_SESSION['userData'][$userData['id']] = [
                         'id' => $userData['id'],
                         'username' => $userData['username'],
                         'email' => $userData['email'],
                     ];
                     header('location: index.php');
-                } else {
-                    $error = 'Wrong password';
                 }
             } else {
-                $error = 'Please verify your email';
+                $error = 'Wrong password';
             }
+        } else {
+            $error = 'Please verify your email';
         }
     } else {
         $error = 'Wrong Email address';
